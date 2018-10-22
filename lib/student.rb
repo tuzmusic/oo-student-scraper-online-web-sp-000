@@ -5,7 +5,6 @@ class Student
   @@all = []
 
   def initialize(student_hash)
-  
     student = {}
     student_hash.each { |key, value|
       self.send(("#{key}="), value)      
@@ -14,20 +13,19 @@ class Student
   end
 
   def self.create_from_collection(students_array)
-
-    # "uses the Scraper class to create new students with the correct name and location."
-
     students_array.each { |hash|
        student = Student.new(hash)
     }
   end
 
   def add_student_attributes(attributes_hash)
-    
+    attributes_hash.each { |key, value|
+      self.send(("#{key}="), value)      
+    }
   end
 
   def self.all
-    
+    @@all
   end
 end
 
