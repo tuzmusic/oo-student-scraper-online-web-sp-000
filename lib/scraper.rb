@@ -20,21 +20,21 @@ class Scraper # scrapes a webpage
   def self.scrape_profile_page(profile_url)
     html = open(profile_url)
     doc = Nokogiri::HTML(html)
-    social = doc.css('.social-icon-container')
     
     student = {}
-    
+
+    social = doc.css('.social-icon-container')
     urls = social.css('a').map { |a| a['href'] }
     ['twitter','linkedin','github'].each { |network|
-       url = urls.find {|a| a.include?(network)}
-       urls.delete(url)
-       student[network.to_sym] = url if url
+       if url = urls.find {|a| a.include?(network)}
+        student[network.to_sym] = url 
+        urls.delete(url)
+       end
     }
 
-    student[:blog] = urls.first if urls.first
+    student[:blog] = urls.first if urls.first # store any remaing social url as [:blog]
     student[:profile_quote] = doc.css('.profile-quote').text
     student[:bio] = doc.css('.description-holder p').text
-    # binding.pry
     student
   end
 
